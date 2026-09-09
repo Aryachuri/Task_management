@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Task</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Task Manager</h1>
+
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            |
+            <a href="{{ url_for('create_task') }}">Create Task</a>
+            |
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <h2>Create New Task</h2>
+
+        <form method="POST" action="{{ url_for('create_task') }}">
+
+            <div>
+                <label for="title">Task Title:</label>
+                <br>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter task title"
+                    required
+                >
+            </div>
+
+            <br>
+
+            <div>
+                <label for="description">Description:</label>
+                <br>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="6"
+                    cols="40"
+                    placeholder="Enter task description"
+                    required
+                ></textarea>
+            </div>
+            <br>
+
+            <div>
+                <label for="title">Category:</label>
+                <br>
+                <input
+                    type="text"
+                    id="title"
+                    name="category"
+                    placeholder="Enter category title"
+                    required
+                >
+            </div>
+
+
+            <br>
+            <div>
+                <label for="title">Tag:</label>
+                <br>
+                <input
+                    type="text"
+                    id="title"
+                    name="tag"
+                    placeholder="Enter Tag title"
+                    required
+                >
+            </div>
+            <br>
+
+            <button type="submit">Create Task</button>
+
+            <a href="{{ url_for('home') }}">
+                <button type="button">Cancel</button>
+            </a>
+
+        </form>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>Task Manager &copy; 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,84 +1,351 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Task Manager</title>
+    
+<style>
+    :root {
+        --primary: #4f46e5;
+        --primary-dark: #3730a3;
+        --accent: #06b6d4;
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --danger: #ef4444;
+        --shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+            radial-gradient(circle at top left, rgba(79,70,229,.10), transparent 32%),
+            radial-gradient(circle at bottom right, rgba(6,182,212,.10), transparent 30%),
+            var(--bg);
+    }
+
+    header {
+        background: rgba(255,255,255,.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(229,231,235,.9);
+        padding: 18px 7%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 1.45rem;
+        font-weight: 800;
+        letter-spacing: -.5px;
+        color: var(--primary);
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        color: #4b5563;
+        text-decoration: none;
+        font-size: .94rem;
+        font-weight: 600;
+        padding: 9px 13px;
+        border-radius: 10px;
+        transition: .2s ease;
+    }
+
+    nav a:hover {
+        color: var(--primary);
+        background: #eef2ff;
+    }
+
+    main {
+        width: min(1050px, 90%);
+        margin: 55px auto;
+    }
+
+    h2 {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        margin: 0 0 10px;
+        letter-spacing: -.8px;
+    }
+
+    h3 { margin-top: 0; }
+
+    p {
+        color: var(--muted);
+        line-height: 1.7;
+    }
+
+    section, .card, form {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+    }
+
+    section {
+        padding: 28px;
+        margin-top: 22px;
+    }
+
+    button, .btn {
+        display: inline-block;
+        border: 0;
+        border-radius: 11px;
+        padding: 11px 18px;
+        background: var(--primary);
+        color: white;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+        box-shadow: 0 5px 14px rgba(79,70,229,.20);
+    }
+
+    button:hover, .btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: #eef2f7;
+        color: #374151;
+        box-shadow: none;
+    }
+
+    .btn-secondary:hover { background: #e5e7eb; }
+
+    .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 22px;
+    }
+
+    form {
+        padding: 32px;
+        max-width: 620px;
+        margin: 28px auto;
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: .92rem;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 11px;
+        background: #fafafa;
+        color: var(--text);
+        font: inherit;
+        outline: none;
+        transition: .2s ease;
+    }
+
+    input:focus, textarea:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(79,70,229,.10);
+    }
+
+    textarea {
+        min-height: 145px;
+        resize: vertical;
+    }
+
+    .auth-page {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 30px 16px;
+    }
+
+    .auth-card {
+        width: min(440px, 100%);
+        background: white;
+        padding: 38px;
+        border-radius: 24px;
+        box-shadow: 0 20px 55px rgba(31,41,55,.12);
+        border: 1px solid var(--border);
+    }
+
+    .auth-card h1 {
+        margin: 0 0 8px;
+        font-size: 2rem;
+    }
+
+    .auth-card form {
+        padding: 0;
+        margin: 28px 0 0;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .auth-card button { width: 100%; }
+
+    .auth-link {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    a { color: var(--primary); }
+
+    .hero {
+        padding: 42px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1 55%, #06b6d4);
+        color: white;
+        border: 0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.10);
+        right: -70px;
+        top: -80px;
+    }
+
+    .hero h2 { color: white; }
+    .hero p { color: rgba(255,255,255,.88); }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 22px;
+        margin-top: 22px;
+    }
+
+    .task-card, .category-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        transition: .2s ease;
+    }
+
+    .task-card:hover, .category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(31,41,55,.11);
+    }
+
+    .task-card h3, .category-card h3 {
+        margin-bottom: 10px;
+        color: #111827;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: var(--primary);
+        font-size: .78rem;
+        font-weight: 800;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 45px 25px;
+        background: white;
+        border: 1px dashed #cbd5e1;
+        border-radius: 18px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px 20px;
+        color: #9ca3af;
+        font-size: .9rem;
+    }
+
+    @media (max-width: 650px) {
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 16px 5%;
+        }
+
+        main { width: 92%; margin: 35px auto; }
+        .hero, section, form, .auth-card { padding: 25px; }
+    }
+</style>
+
 </head>
-
 <body>
+<header>
+    <h1>✓ Task Manager</h1>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
 
-    <header>
-
-        <h1>Task Manager</h1>
-
-        <nav>
-            <a href="{{ url_for('home') }}">Home</a>
-            |
-            <a href="#">Tasks</a>
-            |
-            <a href="#">Categories</a>
-            |
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </nav>
-
-    </header>
-
-    <hr>
-
-    <main>
-
+<main>
+    <section class="hero">
         <h2>Welcome to Task Manager</h2>
-
         {% if session.get("username") %}
-            <p>Welcome, {{ session.get("username") }}!</p>
+            <p>Welcome back, {{ session.get("username") }}! Ready to get things done?</p>
         {% else %}
-            <p>Manage your tasks easily and efficiently.</p>
+            <p>Manage your tasks easily, stay organized, and get more done.</p>
         {% endif %}
+    </section>
 
+    <div class="grid">
         <section>
-
+            <span class="badge">TASKS</span>
             <h3>Task Management</h3>
-
-            <p>
-                Create, organize and manage your tasks
-                from one place.
-            </p>
-
-            <a href="{{url_for('create_task')}}">
-                <button>Create Task</button>
-            </a>
-
-            <a href="#">
-                <button>View Tasks</button>
-            </a>
-
+            <p>Create, organize and manage all your tasks from one place.</p>
+            <div class="actions">
+                <a class="btn" href="{{ url_for('create_task') }}">+ Create Task</a>
+                <a class="btn btn-secondary" href="{{ url_for('view_task') }}">View Tasks</a>
+            </div>
         </section>
 
         <section>
-
+            <span class="badge">ORGANIZE</span>
             <h3>Categories</h3>
-
-            <p>
-                Organize your tasks using different categories.
-            </p>
-
-            <a href="#">
-                <button>View Categories</button>
-            </a>
-
+            <p>Keep your work organized by grouping tasks into categories.</p>
+            <div class="actions">
+                <a class="btn" href="{{ url_for('view_categories') }}">View Categories</a>
+            </div>
         </section>
+    </div>
+</main>
 
-    </main>
-
-    <hr>
-
-    <footer>
-        <p>Task Manager &copy; 2026</p>
-    </footer>
-
+<footer>Task Manager &copy; 2026</footer>
 </body>
 </html>
-

@@ -31,13 +31,13 @@ class Task(Base):
     tags:Mapped["Tag"]=relationship(back_populates="tasks")
     category_id:Mapped[str]=mapped_column(ForeignKey("categories.id"),nullable=False)
     category:Mapped["Category"]=relationship(back_populates="tasks")
-    comments:Mapped[list["Comment"]]=relationship(back_populates="tasks")
+    comments:Mapped[list["Comment"]]=relationship(back_populates="task")
 
 class Category(Base):
     __tablename__="categories"
     id:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
     type:Mapped[str]=mapped_column(String(50),nullable=False)
-    tasks:Mapped[List["Task"]]=relationship(back_populates="categories")
+    tasks:Mapped[List["Task"]]=relationship(back_populates="category")
     user_id:Mapped[int]=mapped_column(ForeignKey("users.id"),nullable=False)
     user:Mapped["User"]=relationship(back_populates="categories")
 

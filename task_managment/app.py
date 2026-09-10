@@ -65,6 +65,8 @@ def logout():
 @app.route("/create_task",methods=["GET","POST"])
 def create_task():
     if request.method=="POST":
+
+        
         title=request.form["title"]
         description=request.form["description"]
         category=request.form["category"]
@@ -81,14 +83,42 @@ def create_task():
         if not tag:
             flash("Please give tag to the task!")
             return render_template(url_for("create_task"))
+        category_obj=db_session.query(Category).filter_by(type=category).first()
+        if not category_obj:
+                    category_obj=Category(type=category,user_id=session["user_id"])
+                    db_session.add(category_obj)
+                    db_session.flush()
+        
+        tag_obj=db_session.query(Tag).filter_by(tag_name=tag).first()
+        if not tag_obj:
+                    tag_obj=Tag(tag_name=tag)
+                    db_session.add(tag_obj)
+                    db_session.flush()
+        
         
 
-        db_session.add(Task(title=title,description=description,categories=category,tags=tag,user_id=session["user_id"]))
+        db_session.add(Task(title=title,description=description,category=category_obj,tags=tag_obj,user_id=session["user_id"]))
         db_session.commit()
 
 
 
     return render_template("create_task.html")
+
+
+@app.route("/view_task",methods=["GET"])
+def view_task():
+     if "user_id" not in session:
+             return redirect(url_for("login"))
+     tasks=db_session.query(Task).filter_by(user_id=session["user_id"]).all()
+     return render_template("view_task.html",tasks=tasks)
+
+@app.route("/view_categories",methods=["GET"])
+def view_categories():
+     if "user_id" not in session:
+        return redirect(url_for("login"))
+
+     categories=db_session.query(Category).filter_by(user_id=session["user_id"]).all()
+     return render_template("view_categories.html",categories=categories)
 
 if __name__=="__main__":
     app.run(debug=True)
